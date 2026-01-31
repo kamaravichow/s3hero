@@ -18,8 +18,6 @@ print_info() { echo -e "${BLUE}ℹ${NC} $1"; }
 print_success() { echo -e "${GREEN}✓${NC} $1"; }
 print_warning() { echo -e "${YELLOW}⚠${NC} $1"; }
 
-INSTALL_DIR="${S3HERO_INSTALL_DIR:-$HOME/.local/bin}"
-VENV_DIR="${S3HERO_VENV_DIR:-$HOME/.s3hero/venv}"
 CONFIG_DIR="$HOME/.s3hero"
 
 echo ""
@@ -28,16 +26,20 @@ echo -e "${BLUE}   S3Hero Uninstaller${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
-# Remove wrapper script
-if [ -f "$INSTALL_DIR/s3hero" ]; then
-    rm -f "$INSTALL_DIR/s3hero"
-    print_success "Removed $INSTALL_DIR/s3hero"
-fi
+# Find Python command
+python_cmd=""
+for cmd in python3 python; do
+    if command -v "$cmd" &> /dev/null; then
+        python_cmd="$cmd"
+        break
+    fi
+done
 
-# Remove virtual environment
-if [ -d "$VENV_DIR" ]; then
-    rm -rf "$VENV_DIR"
-    print_success "Removed virtual environment"
+if [ -n "$python_cmd" ]; then
+    # Uninstall via pip
+    print_info "Uninstalling s3hero package..."
+    "$python_cmd" -m pip uninstall -y s3hero 2>/dev/null || true
+    print_success "Package uninstalled"
 fi
 
 # Ask about config

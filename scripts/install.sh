@@ -207,11 +207,11 @@ EOF
 
 # Add to PATH if needed
 update_path() {
-    local install_dir="$1"
+    local bin_dir="$1"
     local shell_rc=""
     
     # Check if already in PATH
-    if echo "$PATH" | grep -q "$install_dir"; then
+    if echo "$PATH" | grep -q "$bin_dir"; then
         return 0
     fi
     
@@ -237,8 +237,8 @@ update_path() {
         if ! grep -q "s3hero" "$shell_rc" 2>/dev/null; then
             echo "" >> "$shell_rc"
             echo "# S3Hero CLI" >> "$shell_rc"
-            echo "export PATH=\"\$PATH:$install_dir\"" >> "$shell_rc"
-            print_info "Added $install_dir to PATH in $shell_rc"
+            echo "export PATH=\"\$PATH:$bin_dir\"" >> "$shell_rc"
+            print_info "Added $bin_dir to PATH in $shell_rc"
         fi
     fi
 }
@@ -261,17 +261,14 @@ main() {
     check_pip "$python_cmd"
     print_success "pip is available"
     
-    # Create virtual environment
-    create_venv "$python_cmd" "$VENV_DIR"
+    # Install s3hero globally
+    install_s3hero "$python_cmd"
     
-    # Install s3hero
-    install_s3hero "$VENV_DIR"
-    
-    # Create wrapper script
-    create_wrapper "$INSTALL_DIR" "$VENV_DIR"
+    # Get user bin directory
+    local user_bin=$(get_user_bin_dir "$python_cmd")
     
     # Update PATH
-    update_path "$INSTALL_DIR"
+    update_path "$user_bin"
     
     echo ""
     echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
@@ -280,7 +277,7 @@ main() {
     echo ""
     print_info "To get started, run:"
     echo ""
-    echo "    export PATH=\"\$PATH:$INSTALL_DIR\""
+    echo "    export PATH=\"\$PATH:$user_bin\""
     echo "    s3hero configure add"
     echo ""
     print_info "Or start a new terminal session and run:"

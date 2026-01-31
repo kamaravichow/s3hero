@@ -25,7 +25,7 @@ A powerful CLI tool to manage S3 buckets across **AWS S3**, **Cloudflare R2**, a
 ### Quick Install (Linux/macOS)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/aravindgopall/s3hero/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/kamaravichow/s3hero/main/scripts/install.sh | bash
 ```
 
 ### Quick Install (Windows)
@@ -34,7 +34,7 @@ Open PowerShell as Administrator and run:
 
 ```powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force
-irm https://raw.githubusercontent.com/aravindgopall/s3hero/main/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/kamaravichow/s3hero/main/scripts/install.ps1 | iex
 ```
 
 ### Install with pip
@@ -52,7 +52,7 @@ pip install s3hero
 
 ```bash
 # Clone the repository
-git clone https://github.com/aravindgopall/s3hero.git
+git clone https://github.com/kamaravichow/s3hero.git
 cd s3hero
 
 # Create virtual environment
@@ -76,7 +76,7 @@ brew install s3hero
 Or install directly from the formula:
 
 ```bash
-brew install --build-from-source https://raw.githubusercontent.com/aravindgopall/s3hero/main/scripts/s3hero.rb
+brew install --build-from-source https://raw.githubusercontent.com/kamaravichow/s3hero/main/scripts/s3hero.rb
 ```
 
 ## 🚀 Quick Start
@@ -337,7 +337,7 @@ profiles:
 
 ```bash
 # Clone and enter the repository
-git clone https://github.com/aravindgopall/s3hero.git
+git clone https://github.com/kamaravichow/s3hero.git
 cd s3hero
 
 # Create virtual environment
@@ -417,7 +417,7 @@ brew install s3hero
 
 ```bash
 # Using uninstall script
-curl -fsSL https://raw.githubusercontent.com/aravindgopall/s3hero/main/scripts/uninstall.sh | bash
+curl -fsSL https://raw.githubusercontent.com/kamaravichow/s3hero/main/scripts/uninstall.sh | bash
 
 # Or manually
 rm -rf ~/.s3hero ~/.local/bin/s3hero
