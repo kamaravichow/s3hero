@@ -144,7 +144,12 @@ class S3Client:
         try:
             self._client.head_bucket(Bucket=bucket_name)
             return True
-        except ClientError:
+        except ClientError as e:
+            error_code = e.response.get('Error', {}).get('Code', '')
+            # Re-raise auth errors so they aren't masked as "bucket not found"
+            if error_code in ('SignatureDoesNotMatch', 'InvalidAccessKeyId', 'AccessDenied', '403'):
+                raise S3Error(f"Authentication error checking bucket '{bucket_name}': {e}")
+            # 404 or other errors mean bucket doesn't exist or isn't accessible
             return False
 
     def get_bucket_size(self, bucket_name: str) -> Tuple[int, int]:

@@ -319,8 +319,11 @@ def bucket_delete(ctx: Context, name: str, force: bool, yes: bool) -> None:
     """Delete a bucket."""
     client = ctx.get_client()
     
-    if not client.bucket_exists(name):
-        raise click.ClickException(f"Bucket '{name}' not found")
+    try:
+        if not client.bucket_exists(name):
+            raise click.ClickException(f"Bucket '{name}' not found")
+    except S3Error as e:
+        raise click.ClickException(str(e))
     
     if force:
         msg = f"This will [bold red]DELETE ALL OBJECTS[/bold red] in '{name}' and the bucket. Continue?"
@@ -360,8 +363,11 @@ def bucket_empty(ctx: Context, name: str, prefix: str, yes: bool) -> None:
     """Empty a bucket (delete all objects)."""
     client = ctx.get_client()
     
-    if not client.bucket_exists(name):
-        raise click.ClickException(f"Bucket '{name}' not found")
+    try:
+        if not client.bucket_exists(name):
+            raise click.ClickException(f"Bucket '{name}' not found")
+    except S3Error as e:
+        raise click.ClickException(str(e))
     
     if prefix:
         msg = f"Delete all objects with prefix '{prefix}' in bucket '{name}'?"
@@ -395,8 +401,11 @@ def bucket_size(ctx: Context, name: str) -> None:
     """Get bucket size and object count."""
     client = ctx.get_client()
     
-    if not client.bucket_exists(name):
-        raise click.ClickException(f"Bucket '{name}' not found")
+    try:
+        if not client.bucket_exists(name):
+            raise click.ClickException(f"Bucket '{name}' not found")
+    except S3Error as e:
+        raise click.ClickException(str(e))
     
     try:
         with create_simple_progress() as progress:
@@ -415,15 +424,18 @@ def bucket_size(ctx: Context, name: str) -> None:
 @bucket.command('exists')
 @click.argument('name')
 @pass_context
-def bucket_exists(ctx: Context, name: str) -> None:
+def bucket_exists_cmd(ctx: Context, name: str) -> None:
     """Check if a bucket exists."""
     client = ctx.get_client()
     
-    if client.bucket_exists(name):
-        print_success(f"Bucket '{name}' exists")
-    else:
-        print_warning(f"Bucket '{name}' does not exist")
-        sys.exit(1)
+    try:
+        if client.bucket_exists(name):
+            print_success(f"Bucket '{name}' exists")
+        else:
+            print_warning(f"Bucket '{name}' does not exist")
+            sys.exit(1)
+    except S3Error as e:
+        raise click.ClickException(str(e))
 
 
 # =====================
