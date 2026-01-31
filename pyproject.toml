@@ -53,10 +53,10 @@ dev = [
 s3hero = "s3hero.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/aravindgopall/s3hero"
-Documentation = "https://github.com/aravindgopall/s3hero#readme"
-Repository = "https://github.com/aravindgopall/s3hero"
-Issues = "https://github.com/aravindgopall/s3hero/issues"
+Homepage = "https://github.com/kamaravichow/s3hero"
+Documentation = "https://github.com/kamaravichow/s3hero#readme"
+Repository = "https://github.com/kamaravichow/s3hero"
+Issues = "https://github.com/kamaravichow/s3hero/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

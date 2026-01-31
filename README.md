@@ -67,7 +67,7 @@ pip install -e .
 
 ```bash
 # Add the tap
-brew tap aravindgopall/tap
+brew tap kamaravichow/s3hero
 
 # Install s3hero
 brew install s3hero
@@ -401,13 +401,13 @@ twine upload dist/*
 
 ```bash
 # Get SHA256 for release tarball
-curl -sL https://github.com/aravindgopall/s3hero/archive/refs/tags/v1.0.0.tar.gz | shasum -a 256
+curl -sL https://github.com/kamaravichow/s3hero/archive/refs/tags/v1.0.0.tar.gz | shasum -a 256
 ```
 
 4. Users can then install with:
 
 ```bash
-brew tap aravindgopall/tap
+brew tap kamaravichow/s3hero
 brew install s3hero
 ```
 
@@ -436,7 +436,7 @@ Remove-Item -Recurse -Force "$env:LOCALAPPDATA\s3hero"
 
 ```bash
 brew uninstall s3hero
-brew untap aravindgopall/tap
+brew untap kamaravichow/s3hero
 ```
 
 ### pip

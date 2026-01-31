@@ -11,7 +11,7 @@
 $ErrorActionPreference = "Stop"
 
 # Configuration
-$REPO = "aravindgopall/s3hero"
+$REPO = "kamaravichow/s3hero"
 $InstallDir = "$env:LOCALAPPDATA\s3hero"
 $VenvDir = "$InstallDir\venv"
 $BinDir = "$InstallDir\bin"
