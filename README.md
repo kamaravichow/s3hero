@@ -3,469 +3,198 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A powerful CLI tool to manage S3 buckets across **AWS S3**, **Cloudflare R2**, and other **S3-compatible services**.
+**The friendly command-line tool for managing your files in the cloud.**
 
-<p align="center">
-  <img src="https://via.placeholder.com/800x400?text=S3Hero+CLI+Demo" alt="S3Hero Demo" width="700">
-</p>
+S3Hero helps you easily upload, download, and manage files on **AWS S3**, **Cloudflare R2**, **MinIO**, and other similar services without needing to be a cloud expert.
 
-## ✨ Features
-
-- 🪣 **Full Bucket Management** - Create, list, delete, and empty buckets
-- 📁 **Object Operations** - Upload, download, copy, move, and delete files
-- 🔄 **Sync Support** - Sync directories to/from S3 with progress tracking
-- 🌐 **Multi-Provider Support** - AWS S3, Cloudflare R2, MinIO, and any S3-compatible service
-- 👤 **Profile Management** - Multiple profiles for different accounts/providers
-- 📊 **Rich Output** - Beautiful tables, trees, and progress bars
-- 🔗 **Presigned URLs** - Generate temporary access URLs
-- 💨 **Bulk Operations** - Empty buckets, recursive deletes, and more
+---
 
 ## 📦 Installation
 
-### Quick Install (Linux/macOS)
+Choose the method that works best for your system.
 
+### Mac & Linux (Recommended)
+Copy and paste this into your terminal:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/kamaravichow/s3hero/main/scripts/install.sh | bash
 ```
 
-### Quick Install (Windows)
-
+### Windows
 Open PowerShell as Administrator and run:
-
 ```powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force
 irm https://raw.githubusercontent.com/kamaravichow/s3hero/main/scripts/install.ps1 | iex
 ```
 
-### Install with pip
-
+### Using Python (pip)
+If you already have Python installed:
 ```bash
-# Create and activate a virtual environment (recommended)
-python3 -m venv ~/.s3hero/venv
-source ~/.s3hero/venv/bin/activate  # On Windows: ~/.s3hero/venv/Scripts/activate
-
-# Install s3hero
 pip install s3hero
 ```
 
-### Install from Source
+---
 
-```bash
-# Clone the repository
-git clone https://github.com/kamaravichow/s3hero.git
-cd s3hero
+## 🚀 Getting Started
 
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+Follow these 3 simple steps to start using S3Hero.
 
-# Install in development mode
-pip install -e .
-```
-
-### Install via Homebrew (macOS/Linux)
-
-```bash
-# Add the tap
-brew tap kamaravichow/s3hero
-
-# Install s3hero
-brew install s3hero
-```
-
-Or install directly from the formula:
-
-```bash
-brew install --build-from-source https://raw.githubusercontent.com/kamaravichow/s3hero/main/scripts/s3hero.rb
-```
-
-## 🚀 Quick Start
-
-### 1. Configure Your First Profile
-
+### 1. Connect your Cloud Account
+Before you can manage files, tell S3Hero about your cloud provider.
+Run:
 ```bash
 s3hero configure add
 ```
+You will be asked a few questions:
+- **Profile Name**: A nickname for this account (e.g., `my-website`, `personal-backup`).
+- **Provider**: Choose AWS, Cloudflare, etc.
+- **Keys**: Paste your Access Key and Secret Key when prompted.
 
-This will guide you through setting up your S3 connection:
-
-```
-S3Hero Profile Setup
-
-Profile name [default]: my-aws
-Select S3 Provider:
-  1. AWS S3
-  2. Cloudflare R2
-  3. Other S3-Compatible
-Provider [1]: 1
-Access Key ID: AKIA...
-Secret Access Key: ********
-AWS Region [us-east-1]: us-west-2
-```
-
-### 2. List Your Buckets
-
+### 2. Check Connection
+List your buckets to make sure everything is working:
 ```bash
 s3hero bucket list
 ```
 
-### 3. Upload Files
-
+### 3. Create a Bucket (Optional)
+If you don't have a bucket yet, create one:
 ```bash
-# Upload a single file
-s3hero cp myfile.txt s3://my-bucket/myfile.txt
-
-# Upload a directory
-s3hero cp -r ./my-folder/ s3://my-bucket/folder/
+s3hero bucket create my-first-bucket
 ```
 
-## 📖 Usage Guide
+---
 
-### Profile Management
+## 💡 Common Tasks
 
+Here are the most common things you'll want to do.
+
+### 📤 Uploading Files
+**Upload a single file:**
 ```bash
-# Add a new profile interactively
-s3hero configure add
-
-# Add a profile with command-line options
-s3hero configure add \
-  --name production \
-  --provider aws \
-  --access-key AKIA... \
-  --secret-key ... \
-  --region us-east-1 \
-  --default
-
-# List all profiles
-s3hero configure list
-
-# Show profile details (secrets are hidden)
-s3hero configure show my-profile
-
-# Set default profile
-s3hero configure default my-profile
-
-# Remove a profile
-s3hero configure remove old-profile
+s3hero cp my-photo.jpg s3://my-bucket/my-photo.jpg
 ```
 
-### Provider-Specific Setup
-
-#### AWS S3
-
+**Upload an entire folder:**
 ```bash
-s3hero configure add \
-  --name aws-prod \
-  --provider aws \
-  --access-key YOUR_ACCESS_KEY \
-  --secret-key YOUR_SECRET_KEY \
-  --region us-east-1
+# This uploads everything inside 'photos' to the bucket
+s3hero cp -r ./photos/ s3://my-bucket/vacation-pics/
 ```
 
-#### Cloudflare R2
-
+### 📥 Downloading Files
+**Download a file:**
 ```bash
-s3hero configure add \
-  --name cf-r2 \
-  --provider cloudflare_r2 \
-  --access-key YOUR_R2_ACCESS_KEY \
-  --secret-key YOUR_R2_SECRET_KEY \
-  --account-id YOUR_CLOUDFLARE_ACCOUNT_ID
+s3hero cp s3://my-bucket/report.pdf ./downloads/report.pdf
 ```
 
-#### Other S3-Compatible (MinIO, DigitalOcean Spaces, etc.)
-
+**Download a folder:**
 ```bash
-s3hero configure add \
-  --name minio-local \
-  --provider other \
-  --access-key YOUR_ACCESS_KEY \
-  --secret-key YOUR_SECRET_KEY \
-  --endpoint https://minio.example.com \
-  --region us-east-1
+s3hero cp -r s3://my-bucket/backup-data/ ./restore-folder/
 ```
 
-### Bucket Operations
-
+### 🔎 Exploring Files
+**List files in a bucket:**
 ```bash
-# List all buckets
-s3hero bucket list
-s3hero bucket list --json  # JSON output
-
-# Create a bucket
-s3hero bucket create my-new-bucket
-s3hero bucket create my-bucket --region eu-west-1
-
-# Delete a bucket (must be empty)
-s3hero bucket delete my-bucket
-
-# Force delete (empties bucket first)
-s3hero bucket delete my-bucket --force
-
-# Empty a bucket (delete all objects)
-s3hero bucket empty my-bucket
-s3hero bucket empty my-bucket --prefix logs/  # Only delete objects with prefix
-
-# Get bucket size
-s3hero bucket size my-bucket
-
-# Check if bucket exists
-s3hero bucket exists my-bucket
-```
-
-### Object Operations
-
-```bash
-# List objects
 s3hero ls s3://my-bucket
-s3hero ls s3://my-bucket/prefix/
-s3hero ls s3://my-bucket --tree        # Tree view
-s3hero ls s3://my-bucket --limit 100   # Limit results
-s3hero ls s3://my-bucket --json        # JSON output
-
-# Upload files
-s3hero cp local-file.txt s3://my-bucket/remote-file.txt
-s3hero cp -r ./local-dir/ s3://my-bucket/remote-dir/
-
-# Download files
-s3hero cp s3://my-bucket/file.txt ./local-file.txt
-s3hero cp s3://my-bucket/file.txt ./downloads/
-
-# Copy between S3 locations
-s3hero cp s3://bucket-a/file.txt s3://bucket-b/file.txt
-
-# Move/rename objects
-s3hero mv s3://my-bucket/old-name.txt s3://my-bucket/new-name.txt
-
-# Delete objects
-s3hero rm s3://my-bucket/file.txt
-s3hero rm -r s3://my-bucket/folder/     # Recursive delete
-s3hero rm -r -y s3://my-bucket/folder/  # Skip confirmation
-
-# View object info
-s3hero info s3://my-bucket/file.txt
-
-# View file contents
-s3hero cat s3://my-bucket/file.txt
-
-# Generate presigned URL
-s3hero presign s3://my-bucket/file.txt
-s3hero presign s3://my-bucket/file.txt --expires 7200  # 2 hours
 ```
 
-### Sync Operations
-
+**See a tree view of your folders (Great for overviews!):**
 ```bash
-# Sync local directory to S3
-s3hero sync ./local/ s3://my-bucket/remote/
-
-# Sync S3 to local directory
-s3hero sync s3://my-bucket/remote/ ./local/
-
-# Sync with delete (mirror)
-s3hero sync --delete ./local/ s3://my-bucket/remote/
-
-# Dry run (show what would happen)
-s3hero sync --dry-run ./local/ s3://my-bucket/remote/
-```
-
-### Using Different Profiles
-
-```bash
-# Use a specific profile for a command
-s3hero -p production bucket list
-s3hero --profile staging ls s3://my-bucket
-
-# Set profile via environment variable
-export S3HERO_PROFILE=production
-s3hero bucket list
-```
-
-### Output Formats
-
-```bash
-# Table format (default)
-s3hero bucket list
-
-# JSON format
-s3hero bucket list --json
-s3hero ls s3://my-bucket --json
-
-# Tree view for objects
 s3hero ls s3://my-bucket --tree
 ```
 
-## 🔧 Configuration
+### 🔄 Backing Up & Syncing
+Use `sync` to make the destination look exactly like the source. This is great for backups.
 
-Configuration is stored in `~/.s3hero/config.yaml`:
-
-```yaml
-default_profile: aws-prod
-profiles:
-  - name: aws-prod
-    provider: aws
-    access_key: AKIA...
-    secret_key: ...
-    region: us-east-1
-    
-  - name: cf-r2
-    provider: cloudflare_r2
-    access_key: ...
-    secret_key: ...
-    account_id: ...
-    region: auto
-    
-  - name: minio
-    provider: other
-    access_key: ...
-    secret_key: ...
-    endpoint_url: https://minio.example.com
-    region: us-east-1
-```
-
-### Environment Variables
-
-| Variable | Description |
-|----------|-------------|
-| `S3HERO_PROFILE` | Default profile to use |
-| `S3HERO_INSTALL_DIR` | Custom installation directory |
-| `S3HERO_VENV_DIR` | Custom virtual environment directory |
-
-## 🛠️ Development
-
-### Setting Up Development Environment
-
+**Backup local folder to cloud:**
 ```bash
-# Clone and enter the repository
-git clone https://github.com/kamaravichow/s3hero.git
-cd s3hero
-
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install in development mode with dev dependencies
-pip install -e ".[dev]"
-
-# Run tests
-pytest
-
-# Run linting
-ruff check src/
-black --check src/
-
-# Run type checking
-mypy src/
+s3hero sync ./important-docs/ s3://my-bucket/backup-docs/
 ```
 
-### Project Structure
-
-```
-s3hero/
-├── src/
-│   └── s3hero/
-│       ├── __init__.py      # Package metadata
-│       ├── cli.py           # CLI commands (Click)
-│       ├── client.py        # S3 client wrapper
-│       ├── config.py        # Configuration management
-│       └── utils.py         # Utilities and formatters
-├── scripts/
-│   ├── install.sh           # Linux/macOS installer
-│   ├── install.ps1          # Windows installer
-│   ├── uninstall.sh         # Uninstaller
-│   └── s3hero.rb           # Homebrew formula
-├── pyproject.toml           # Project configuration
-├── requirements.txt         # Dependencies
-└── README.md
-```
-
-## 📦 Publishing to PyPI
-
+**Restore cloud backup to local computer:**
 ```bash
-# Build the package
-pip install build
-python -m build
-
-# Upload to PyPI
-pip install twine
-twine upload dist/*
+s3hero sync s3://my-bucket/backup-docs/ ./restored-docs/
 ```
 
-## 🍺 Publishing to Homebrew
-
-### Create a Homebrew Tap
-
-1. Create a GitHub repository named `homebrew-tap`
-2. Copy `scripts/s3hero.rb` to `Formula/s3hero.rb` in your tap
-3. Update the formula with correct SHA256 checksums:
-
+### 🔗 Sharing Files
+Generate a temporary link to share a private file with someone (valid for 1 hour by default):
 ```bash
-# Get SHA256 for release tarball
-curl -sL https://github.com/kamaravichow/s3hero/archive/refs/tags/v1.0.0.tar.gz | shasum -a 256
+s3hero presign s3://my-bucket/secret-plan.pdf
 ```
 
-4. Users can then install with:
-
+### 🗑️ Cleaning Up
+**Delete a file:**
 ```bash
-brew tap kamaravichow/s3hero
-brew install s3hero
+s3hero rm s3://my-bucket/old-file.txt
 ```
 
-## 🗑️ Uninstallation
-
-### Linux/macOS
-
+**Delete a folder and everything inside it:**
 ```bash
-# Using uninstall script
-curl -fsSL https://raw.githubusercontent.com/kamaravichow/s3hero/main/scripts/uninstall.sh | bash
-
-# Or manually
-rm -rf ~/.s3hero ~/.local/bin/s3hero
+s3hero rm -r s3://my-bucket/trash-folder/
 ```
 
-### Windows
-
-```powershell
-# Remove installation
-Remove-Item -Recurse -Force "$env:LOCALAPPDATA\s3hero"
-
-# Remove from PATH (open System Properties > Environment Variables)
-```
-
-### Homebrew
-
+**Empty a bucket completely:**
 ```bash
-brew uninstall s3hero
-brew untap kamaravichow/s3hero
+s3hero bucket empty my-bucket
 ```
 
-### pip
+---
 
+## ☁️ Provider Setup Examples
+
+Here is exactly what you need for common providers.
+
+### AWS S3
+You need an **Access Key ID** and **Secret Access Key**.
 ```bash
-pip uninstall s3hero
+s3hero configure add
+# Choose '1. AWS S3'
+# Enter your keys
+# Region: e.g., us-east-1
 ```
 
-## 🤝 Contributing
+### Cloudflare R2
+You need an **Access Key**, **Secret Key**, and **Account ID**.
+```bash
+s3hero configure add --provider cloudflare_r2
+# It will ask for your keys and Account ID found in R2 dashboard
+```
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+### MinIO / Custom
+You need your keys and the **Endpoint URL**.
+```bash
+s3hero configure add
+# Choose '3. Other S3-Compatible'
+# Enter keys
+# Endpoint: https://minio.example.com
+```
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+---
+
+## 🔧 Pro Tips
+
+### Switching Profiles
+If you have multiple accounts (e.g., `work` and `personal`), you can switch between them easily.
+
+**Run a single command as a different user:**
+```bash
+s3hero -p work bucket list
+```
+
+**Set a default profile:**
+```bash
+s3hero configure default work
+```
+
+### Viewing Configuration
+See where S3Hero is saving your settings:
+```bash
+s3hero configure list
+```
+
+---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [boto3](https://github.com/boto/boto3) - AWS SDK for Python
-- [Click](https://click.palletsprojects.com/) - CLI framework
-- [Rich](https://github.com/Textualize/rich) - Beautiful terminal formatting
-
----
+This project is licensed under the MIT License.
 
 <p align="center">
   Made with ❤️ by the S3Hero Team
