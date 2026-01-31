@@ -197,5 +197,5 @@ s3hero configure list
 This project is licensed under the MIT License.
 
 <p align="center">
-  Made with ❤️ by the S3Hero Team
+  Made with ❤️ by Aravind
 </p>
